@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="8195" systemVersion="15A284" minimumToolsVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9057" systemVersion="15B42" minimumToolsVersion="Automatic">
     <entity name="Event" representedClassName=".Event" syncable="YES">
         <attribute name="end" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="lastPublished" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="lastUpdated" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="recordID" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="start" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="trip" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Trip" inverseName="events" inverseEntity="Trip" syncable="YES"/>
     </entity>
     <entity name="Trip" representedClassName=".Trip" syncable="YES">
+        <attribute name="lastPublished" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="lastUpdated" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="owned" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="recordID" optional="YES" attributeType="Transformable" syncable="YES"/>
@@ -15,7 +19,7 @@
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Event" inverseName="trip" inverseEntity="Event" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Event" positionX="241" positionY="-151" width="128" height="118"/>
-        <element name="Trip" positionX="36" positionY="-144" width="128" height="118"/>
+        <element name="Event" positionX="241" positionY="-151" width="128" height="148"/>
+        <element name="Trip" positionX="36" positionY="-144" width="128" height="148"/>
     </elements>
 </model>

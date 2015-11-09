@@ -13,16 +13,30 @@ import CloudKit
 
 class Trip: NSManagedObject {
 
-    // Create
+    var needsPublish: Bool {
+        
+        print("updated: \(lastUpdated)")
+        print("published: \(lastPublished)")
+        
+        guard let lastPublished = lastPublished else { return true }
+        guard let lastUpdated = lastUpdated else { return true }
+        return lastUpdated > lastPublished
+    }
+}
+
+
+// MARK: - Create
+extension Trip {
+    
     convenience init(trip: CKTrip, owned: Bool) {
         let entity = NSEntityDescription.entityForName("Trip", inManagedObjectContext: CDManager.sharedInstance.context)!
         self.init(entity: entity, insertIntoManagedObjectContext: CDManager.sharedInstance.context)
-                
+        
         self.recordID = trip.recordID
         self.owned = owned
         self.title = trip.title
         
-        CKManager.sharedInstance.fetchEvents(forTrip: trip.record) { records in
+        CKManager.sharedInstance.fetchEvents(forTripID: trip.recordID) { records in
             records.forEach { CDManager.sharedInstance.createEvent($0, forTrip: trip.record) }
         }
     }
@@ -33,6 +47,10 @@ class Trip: NSManagedObject {
         self.owned = owned
         CDManager.sharedInstance.saveContext()
     }
-    
-    // Set Events
 }
+
+// MARK: - Update
+extension Trip {
+
+}
+

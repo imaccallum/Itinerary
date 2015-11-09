@@ -48,8 +48,12 @@ extension TripsSearchController {
             message = "Already subscribed to: \(title)"
         } else {
             // Create and subscribe
-            let cdtrip = Trip(trip: trip, owned: false)
-            CKManager.sharedInstance.subscribeToTrip(cdtrip.recordID)
+            CKManager.sharedInstance.subscribeToTrip(trip.recordID) { success in
+                if success {
+                    _ = Trip(trip: trip, owned: false)
+                }
+            }
+            
             message = "Subscribed to: \(title)"
         }
         

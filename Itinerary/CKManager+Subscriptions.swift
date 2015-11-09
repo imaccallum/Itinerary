@@ -27,33 +27,21 @@ extension CKManager {
         return subscription
     }
     
-    func subscribeToTrip(id: CKRecordID?) {
+    func subscribeToTrip(id: CKRecordID?, completion: (Bool -> Void)?) {
         print("subscribe")
         guard let id = id else { return }
         
         let sub = subscription(forRecordWithID: id)
         
-        CKManager.sharedInstance.publicDatabase.fetchSubscriptionWithID(sub.subscriptionID) { subscription, error in
-            print(subscription)
-            print(error?.localizedDescription)
-        }
-
-        
-        CKManager.sharedInstance.publicDatabase.fetchAllSubscriptionsWithCompletionHandler { subscriptions, error in
-            print(subscriptions)
-            print(error?.localizedDescription)
-            subscriptions?.forEach {
-                print($0)
-            }
-        }
-        
         CKManager.sharedInstance.publicDatabase.saveSubscription(sub) { subscription, error in
             print(subscription)
             print(error?.localizedDescription)
-            guard let subscription = subscription else { return }
-            
-            // Successfully Created
-            print("Subscription saved: \(subscription.subscriptionID)")
+            guard let error = error else {
+                completion?(true)
+                return
+            }
+   
+            completion?(false)
             
         }
     }

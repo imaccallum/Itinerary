@@ -14,6 +14,10 @@ import CloudKit
 class CDManager {
     static let sharedInstance = CDManager()
     
+    init() {
+
+    }
+    
     // MARK: - Core Data stack
     lazy var applicationDocumentsDirectory: NSURL = {
         let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
@@ -61,7 +65,7 @@ class CDManager {
     
     // MARK: - Core Data Saving support
     
-    func saveContext () {
+    func saveContext() {
         if context.hasChanges {
             do {
                 try context.save()
@@ -71,5 +75,5 @@ class CDManager {
                 abort()
             }
         }
-    }
+    }    
 }

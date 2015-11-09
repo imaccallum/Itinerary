@@ -16,4 +16,10 @@ class Event: NSManagedObject {
         self.init(entity: entity, insertIntoManagedObjectContext: CDManager.sharedInstance.context)
     }
     
+    
+    var needsPublish: Bool {
+        guard let lastPublished = lastPublished else { return true }
+        guard let lastUpdated = lastUpdated else { return true }
+        return lastUpdated > lastPublished
+    }
 }

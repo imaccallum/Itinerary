@@ -32,12 +32,27 @@ extension CDManager {
     
     // Update
     func updateTrip(trip: Trip, withRecord record: CKRecord) {
+        print("updating trip")
         let cktrip = CKTrip(record: record)
         
         trip.title = cktrip.title
         trip.recordID = cktrip.recordID
         
         saveContext()
+    }
+    
+    func handleTrip(id: CKRecordID) {
+        CKManager.sharedInstance.fetchTrip(id) { record in
+            guard let record = record else { return }
+            print("handling trip")
+            
+            
+            if let trip = self.fetchTrip(id) {
+                self.updateTrip(trip, withRecord: record)
+            } else {
+                self.createTrip(record, owned: false)
+            }
+        }
     }
     
     // Delete

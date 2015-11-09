@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8206D56A1BEFB39C00FFF344 /* Extensions+NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8206D5691BEFB39C00FFF344 /* Extensions+NSDate.swift */; };
 		822143F31BC4494A006623CC /* TripSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822143F21BC4494A006623CC /* TripSearchCell.swift */; };
 		822143F51BC4497D006623CC /* TripSearchCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 822143F41BC4497D006623CC /* TripSearchCell.xib */; };
 		822DCBC51BB3679000C24F25 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822DCBC41BB3679000C24F25 /* AppDelegate.swift */; };
@@ -35,13 +36,13 @@
 		826418931BB8D6E4003771EB /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264188D1BB8D6E4003771EB /* Event.swift */; };
 		826418971BB9A208003771EB /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 826418961BB9A208003771EB /* CloudKit.framework */; };
 		826418991BB9B0EE003771EB /* CKTrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826418981BB9B0EE003771EB /* CKTrip.swift */; };
-		8264189C1BB9B612003771EB /* GlobalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264189B1BB9B612003771EB /* GlobalExtensions.swift */; };
+		8264189C1BB9B612003771EB /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264189B1BB9B612003771EB /* Extensions.swift */; };
 		8264189E1BB9CE51003771EB /* EditTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264189D1BB9CE51003771EB /* EditTripViewController.swift */; };
-		826418A91BBA2BB3003771EB /* NSManagedObjectExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826418A81BBA2BB3003771EB /* NSManagedObjectExtensions.swift */; };
-		82A312F21BDD6C890029A506 /* FoundationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A312F11BDD6C890029A506 /* FoundationExtensions.swift */; };
+		82A312F21BDD6C890029A506 /* Extensions+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A312F11BDD6C890029A506 /* Extensions+Foundation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8206D5691BEFB39C00FFF344 /* Extensions+NSDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extensions+NSDate.swift"; sourceTree = "<group>"; };
 		822143F21BC4494A006623CC /* TripSearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripSearchCell.swift; sourceTree = "<group>"; };
 		822143F41BC4497D006623CC /* TripSearchCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TripSearchCell.xib; sourceTree = "<group>"; };
 		822DCBC11BB3679000C24F25 /* Itinerary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Itinerary.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,10 +74,9 @@
 		826418951BB9A1FB003771EB /* Itinerary.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Itinerary.entitlements; sourceTree = "<group>"; };
 		826418961BB9A208003771EB /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		826418981BB9B0EE003771EB /* CKTrip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CKTrip.swift; path = ../CKTrip.swift; sourceTree = "<group>"; };
-		8264189B1BB9B612003771EB /* GlobalExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalExtensions.swift; sourceTree = "<group>"; };
+		8264189B1BB9B612003771EB /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		8264189D1BB9CE51003771EB /* EditTripViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditTripViewController.swift; sourceTree = "<group>"; };
-		826418A81BBA2BB3003771EB /* NSManagedObjectExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSManagedObjectExtensions.swift; sourceTree = "<group>"; };
-		82A312F11BDD6C890029A506 /* FoundationExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoundationExtensions.swift; sourceTree = "<group>"; };
+		82A312F11BDD6C890029A506 /* Extensions+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extensions+Foundation.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,9 +206,9 @@
 		8264189A1BB9B605003771EB /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				8264189B1BB9B612003771EB /* GlobalExtensions.swift */,
-				82A312F11BDD6C890029A506 /* FoundationExtensions.swift */,
-				826418A81BBA2BB3003771EB /* NSManagedObjectExtensions.swift */,
+				8264189B1BB9B612003771EB /* Extensions.swift */,
+				82A312F11BDD6C890029A506 /* Extensions+Foundation.swift */,
+				8206D5691BEFB39C00FFF344 /* Extensions+NSDate.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -295,20 +295,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				826418901BB8D6E4003771EB /* Trip+CoreDataProperties.swift in Sources */,
-				8264189C1BB9B612003771EB /* GlobalExtensions.swift in Sources */,
+				8264189C1BB9B612003771EB /* Extensions.swift in Sources */,
 				826418931BB8D6E4003771EB /* Event.swift in Sources */,
 				825010EE1BCF23830086E44F /* CDManager+Events.swift in Sources */,
 				826418871BB8C7A9003771EB /* TripsTableViewController.swift in Sources */,
 				822143F31BC4494A006623CC /* TripSearchCell.swift in Sources */,
 				825010E21BCDA7370086E44F /* CKManager+Subscriptions.swift in Sources */,
 				825010E01BCD82120086E44F /* TripsSearchController.swift in Sources */,
+				8206D56A1BEFB39C00FFF344 /* Extensions+NSDate.swift in Sources */,
 				822DCBCD1BB3679000C24F25 /* Itinerary.xcdatamodeld in Sources */,
 				8240EF171BCD5C6000D24598 /* CKManager.swift in Sources */,
 				825010DE1BCD7B1F0086E44F /* EditEventViewController.swift in Sources */,
 				826418911BB8D6E4003771EB /* Trip.swift in Sources */,
-				826418A91BBA2BB3003771EB /* NSManagedObjectExtensions.swift in Sources */,
 				825010DA1BCD79880086E44F /* UIDateInputField.swift in Sources */,
-				82A312F21BDD6C890029A506 /* FoundationExtensions.swift in Sources */,
+				82A312F21BDD6C890029A506 /* Extensions+Foundation.swift in Sources */,
 				825010E41BCDA7E80086E44F /* CKManager+Trips.swift in Sources */,
 				825010E61BCDA7F50086E44F /* CKManager+Events.swift in Sources */,
 				825010F01BCF23910086E44F /* CDManager+Trips.swift in Sources */,

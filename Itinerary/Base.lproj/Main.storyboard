@@ -317,6 +317,7 @@
                     <connections>
                         <outlet property="eventsTableView" destination="Trr-gg-Sam" id="6Yz-7y-cDh"/>
                         <outlet property="locationTextField" destination="GMZ-vQ-yK3" id="oaW-QP-Gsd"/>
+                        <outlet property="publishBarButton" destination="gyn-qt-VDe" id="v1T-rb-mfF"/>
                         <outlet property="titleTextField" destination="Y72-k5-pML" id="nBf-EX-v5x"/>
                         <segue destination="7iD-Mz-g3L" kind="presentation" identifier="EditEventSegue" id="4pN-fv-vGd"/>
                     </connections>

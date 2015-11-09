@@ -27,9 +27,14 @@ extension AppDelegate {
     }
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
-        print(application.applicationState.rawValue)
-        
+                
+        guard application.applicationState == .Background || application.applicationState == .Active else {
+            completionHandler(.NoData)
+            return
+        }
+
         let token = NSUserDefaults.standardUserDefaults().dataObjectForKey("notificationChangeToken") as? CKServerChangeToken
+        print(token)
         
         let operation = CKFetchNotificationChangesOperation(previousServerChangeToken: token)
         
@@ -37,7 +42,7 @@ extension AppDelegate {
             guard let newToken = newToken else { return }
             
             NSUserDefaults.standardUserDefaults().setDataObject(newToken, forKey: "notificationChangeToken")
-            
+            print("token saved")
             completionHandler(.NewData)
         }
         
@@ -57,11 +62,14 @@ extension AppDelegate {
             switch queryNotification.queryNotificationReason {
             case .RecordCreated:
                 print("created")
+                // This should never happen
             case .RecordDeleted:
                 print("deleted")
+                CKManager.sharedInstance.unsubscribeToTrip(id)
                 CDManager.sharedInstance.deleteTrip(id)
             case .RecordUpdated:
                 print("update")
+                CDManager.sharedInstance.handleTrip(id)
             }
         }
     }

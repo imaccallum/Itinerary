@@ -12,35 +12,23 @@ import CloudKit
 extension CKManager {
     
     // Create
-    func createEvents(events: [Event], forTripID id: CKRecordID?) {
-        guard let id = id else { return }
+    func createEvents(events: [Event]?, forTripID id: CKRecordID?) {
+        guard let id = id, events = events else { return }
         
-        let records = events.map { event -> CKRecord in
-            var temp = CKEvent(event: event)
-            event.recordID = temp.recordID
-            temp.trip = CKReference(recordID: id, action: .DeleteSelf)
-            return temp.record
+        for event in events {
+            var ckevent = CKEvent(event: event)
+            ckevent.trip = CKReference(recordID: id, action: .DeleteSelf)
+            
+            publicDatabase.saveRecord(ckevent.record) { record, error in
+                event.recordID = record?.recordID
+                event.lastPublished = NSDate()
+            }
         }
-        print("\(records.count) events to save")
-        
-        let operation = CKModifyRecordsOperation(recordsToSave: records, recordIDsToDelete: nil)
-        
-        operation.perRecordCompletionBlock = { record, error in
-            guard let record = record else { return }
-            print("saved record id: \(record.recordID)")
-        }
-        
-        operation.modifyRecordsCompletionBlock = { savedRecords, deletedRecordIDs, error in
-            guard let savedRecords = savedRecords else { return }
-            print("\(savedRecords.count) records saved")
-        }
-        
-        CKManager.sharedInstance.publicDatabase.addOperation(operation)
     }
-    
+
 
     // Read
-    func fetchEvents(forTrip trip: CKRecord, cursor: CKQueryCursor? = nil, fetchedRecords: [CKRecord] = [], completion: ([CKRecord] -> Void)?) {
+    func fetchEvents(forTripID tripID: CKRecordID, cursor: CKQueryCursor? = nil, fetchedRecords: [CKRecord] = [], completion: ([CKRecord] -> Void)?) {
         
         var records = fetchedRecords
         var operation: CKQueryOperation!
@@ -48,7 +36,7 @@ extension CKManager {
         if let cursor = cursor {
             operation = CKQueryOperation(cursor: cursor)
         } else {
-            let predicate = NSPredicate(format: "trip = %@", trip)
+            let predicate = NSPredicate(format: "trip = %@", tripID)
             let query = CKQuery(recordType: "Event", predicate: predicate)
             
             operation = CKQueryOperation(query: query)
@@ -59,9 +47,8 @@ extension CKManager {
         }
         
         operation.queryCompletionBlock = { cursor, error in
-            
             if let cursor = cursor {
-                self.fetchEvents(forTrip: trip, cursor: cursor, fetchedRecords: records, completion: completion)
+                self.fetchEvents(forTripID: tripID, cursor: cursor, fetchedRecords: records, completion: completion)
             } else {
                 completion?(records)
             }
@@ -70,13 +57,42 @@ extension CKManager {
         CKManager.sharedInstance.publicDatabase.addOperation(operation)
     }
     
-    
+    func fetchEvent(id: CKRecordID, completion: (CKRecord? -> ())?) {
+        publicDatabase.fetchRecordWithID(id) { record, error in
+            completion?(record)
+        }
+    }
     
     
     // Update
-    
-    
-    
+    func updateEvents(events: [Event], forTripID tripID: CKRecordID) {
+
+        for event in events {
+            guard let id = event.recordID else {
+                createEvents([event], forTripID: tripID)
+                continue
+            }
+            
+            fetchEvent(id) { record in
+                guard let record = record else { return }
+                
+                // Set properties on record
+                var ckevent = CKEvent(record: record)
+                ckevent.title = event.title
+                ckevent.start = event.start
+                ckevent.end = event.end
+
+                
+                // Update record
+                self.publicDatabase.saveRecord(ckevent.record) { savedRecord, error in
+                    guard let savedRecord = savedRecord else { return }
+                    
+                    let savedEvent = CDManager.sharedInstance.fetchEvent(savedRecord.recordID)
+                    savedEvent?.lastPublished = NSDate()
+                }
+            }
+        }
+    }
     
     
     // Delete
@@ -84,7 +100,6 @@ extension CKManager {
         guard let id = id else { return }
         publicDatabase.deleteRecordWithID(id) { id, error in
             print(error?.localizedDescription)
-            print("deleted object \(id)")
         }
     }
 }

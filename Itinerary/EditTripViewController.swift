@@ -16,6 +16,7 @@ class EditTripViewController: UIViewController {
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var locationTextField: UITextField!
     @IBOutlet weak var eventsTableView: UITableView!
+    @IBOutlet weak var publishBarButton: UIBarButtonItem!
 
     var fetchedResultsController: NSFetchedResultsController!
     var trip: Trip!
@@ -42,8 +43,12 @@ class EditTripViewController: UIViewController {
         // Update label
         titleTextField.text = trip.title
         locationTextField.text = trip.location
+        
+        // Add observers
+        titleTextField.addTarget(self, action: "textFieldDidChange:", forControlEvents: .EditingChanged)
+        locationTextField.addTarget(self, action: "textFieldDidChange:", forControlEvents: .EditingChanged)
     }
-    
+
     
     @IBAction func addEventButtonPressed(sender: UIButton) {
         let event = Event()
@@ -52,25 +57,25 @@ class EditTripViewController: UIViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "EditEventSegue" {
-            print("segue")
             let destination = (segue.destinationViewController as? UINavigationController)?.viewControllers.first as? EditEventViewController
             destination?.event = sender as? Event
         }
     }
     @IBAction func cancelButtonPressed(sender: UIBarButtonItem) {
+        
+        CDManager.sharedInstance.context.rollback()
+        
         dismissViewControllerAnimated(true) {}
     }
     
     
     @IBAction func publishButtonPressed(sender: UIBarButtonItem) {
-        // Set Values
-        trip.title = titleTextField.text
-        trip.location = locationTextField.text
+        
         CDManager.sharedInstance.saveContext()
+        
         // Push to Cloud
-        if let id = trip.recordID {
+        if let _ = trip.recordID {
             // Update CKTrip
-            print("updating trip id: \(id)")
             CKManager.sharedInstance.updateTrip(trip)
         } else {
             // Create CKTrip
@@ -78,10 +83,17 @@ class EditTripViewController: UIViewController {
         }
         
         dismissViewControllerAnimated(true) {}
-
+    }
     
+    func textFieldDidChange(sender: UITextField) {
+        if sender === titleTextField {
+            trip.title = titleTextField.text
+        } else if sender === locationTextField {
+            trip.location = locationTextField.text
+        }
     }
 }
+
 
 // MARK: - UITableViewDelegate
 extension EditTripViewController: UITableViewDelegate {
@@ -135,9 +147,8 @@ extension EditTripViewController: NSFetchedResultsControllerDelegate {
         eventsTableView.endUpdates()
     }
     
-    
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-
+        
         switch type {
         case .Insert:
             eventsTableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)

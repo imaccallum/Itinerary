@@ -50,8 +50,7 @@ class TripViewController: UIViewController {
         fetchedResultsController.delegate = self
         
         NSNotificationCenter.defaultCenter().addObserverForName(NSManagedObjectContextObjectsDidChangeNotification, object: nil, queue: nil) { notification in
-            
-            print("OBJECT CHANGED")
+            // Update content
             self.titleLabel.text = self.trip.title ?? ""
             self.locationLabel.text = self.trip.location ?? ""
         }

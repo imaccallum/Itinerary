@@ -13,9 +13,9 @@ import CoreData
 // MARK: - Event CRUD
 extension CDManager {
     // Create
-    func createEvent(record: CKRecord, forTrip trip: CKRecord) {
+    func createEvent(record: CKRecord, forTripID tripID: CKRecordID) {
         let newEvent = NSEntityDescription.insertNewObjectForEntityForName("Event", inManagedObjectContext: context) as! Event
-        newEvent.trip = fetchTrip(trip.recordID)
+        newEvent.trip = fetchTrip(tripID)
         updateEvent(newEvent, withRecord: record)
     }
     
@@ -38,14 +38,19 @@ extension CDManager {
         event.start = ckevent.start
         event.end = ckevent.end
         event.recordID = ckevent.recordID
-        
-        saveContext()
+    }
+ 
+    // Create or Update
+    func createOrUpdateEvent(record: CKRecord, forTripID tripID: CKRecordID) {
+        if let event = fetchEvent(record.recordID) {
+            updateEvent(event, withRecord: record)
+        } else {
+            createEvent(record, forTripID: tripID)
+        }
     }
     
     // Delete
-    func deleteEvent(id: CKRecordID?) {
-        guard let id = id else { return }
-
+    func deleteEvent(id: CKRecordID) {
         if let event = fetchEvent(id) {
             CDManager.sharedInstance.context.deleteObject(event)
             saveContext()

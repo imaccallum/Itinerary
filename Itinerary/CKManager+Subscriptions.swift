@@ -27,22 +27,48 @@ extension CKManager {
         return subscription
     }
     
+    func subscription(forEventsWithTripID tripID: CKRecordID) -> CKSubscription {
+        let predicate = NSPredicate(format: "trip = %@", tripID)
+        let subscription = CKSubscription(recordType: "Event",
+            predicate: predicate,
+            options: [.FiresOnRecordCreation, .FiresOnRecordDeletion, .FiresOnRecordUpdate])
+        
+        let notificationInfo = CKNotificationInfo()
+        notificationInfo.alertBody = "An event has been modified!"
+        notificationInfo.alertLocalizationKey = "%@"
+        notificationInfo.alertLocalizationArgs = ["title"]
+        notificationInfo.shouldBadge = false
+        notificationInfo.shouldSendContentAvailable = true
+        subscription.notificationInfo = notificationInfo
+        
+        return subscription
+    }
+    
     func subscribeToTrip(id: CKRecordID?, completion: (Bool -> Void)?) {
         print("subscribe")
         guard let id = id else { return }
         
-        let sub = subscription(forRecordWithID: id)
+        let tripSubscription = subscription(forRecordWithID: id)
+        let eventsSubscription = subscription(forEventsWithTripID: id)
         
-        CKManager.sharedInstance.publicDatabase.saveSubscription(sub) { subscription, error in
-            print(subscription)
-            print(error?.localizedDescription)
-            guard let error = error else {
-                completion?(true)
-                return
-            }
-   
-            completion?(false)
+        CKManager.sharedInstance.publicDatabase.saveSubscription(tripSubscription) { tripSubscription, tripError in
             
+            
+            CKManager.sharedInstance.publicDatabase.saveSubscription(eventsSubscription) { eventsSubscription, eventsError in
+                
+                guard let tripError = tripError, eventsError = eventsError else {
+                    completion?(true)
+                    return
+                }
+                
+                switch (tripError.code, eventsError.code) {
+                case (11,11):
+                    completion?(true)
+                default:
+                    completion?(false)
+                }
+
+            }
         }
     }
     

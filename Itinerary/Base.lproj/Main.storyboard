@@ -51,6 +51,18 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="ypy-eL-Do1">
                         <nil key="title"/>
+                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="cFg-Yl-vIM">
+                            <rect key="frame" x="180" y="7" width="240" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <animations/>
+                            <segments>
+                                <segment title="Subscribed"/>
+                                <segment title="Owned"/>
+                            </segments>
+                            <connections>
+                                <action selector="segmentChanged:" destination="8eW-HP-dhv" eventType="valueChanged" id="MIA-03-pJW"/>
+                            </connections>
+                        </segmentedControl>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="ror-yh-2nv">
                             <connections>
                                 <action selector="addButtonPressed:" destination="8eW-HP-dhv" id="nXB-Gr-dbD"/>
@@ -58,6 +70,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="segmentControl" destination="cFg-Yl-vIM" id="rBg-PC-4Q8"/>
                         <segue destination="TjC-ez-bzg" kind="show" identifier="TripSegue" id="d6F-b7-naY"/>
                     </connections>
                 </tableViewController>

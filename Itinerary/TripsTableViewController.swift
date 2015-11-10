@@ -13,31 +13,15 @@ import CloudKit
 
 class TripsTableViewController: UITableViewController {
     
+    @IBOutlet weak var segmentControl: UISegmentedControl!
     let context = CDManager.sharedInstance.context
-    let fetchedResultsController: NSFetchedResultsController
+    var fetchedResultsController: NSFetchedResultsController!
     var searchController: UISearchController!
     var searchResultsController: TripsSearchController!
     
-    required init?(coder aDecoder: NSCoder) {
-        
-        // Setup FRC
-        let fetchRequest = NSFetchRequest(entityName: "Trip")
-        let sortDescriptor = NSSortDescriptor(key: "title", ascending: false)
-        fetchRequest.sortDescriptors = [sortDescriptor]
-        
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-        
-        _ = try? fetchedResultsController.performFetch()
-        
-        super.init(coder: aDecoder)
-
-        // Set Delegates
-        fetchedResultsController.delegate = self
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         searchResultsController = TripsSearchController()
         searchResultsController.dismissBlock = {
             self.searchController.active = false
@@ -46,16 +30,42 @@ class TripsTableViewController: UITableViewController {
         searchController = UISearchController(searchResultsController: searchResultsController)
         searchController.searchResultsUpdater = self
         searchController.searchBar.sizeToFit()
-        tableView.tableHeaderView = searchController.searchBar
         
         searchController.dimsBackgroundDuringPresentation = false // default is YES
         searchController.searchBar.delegate = self // so we can monitor text changes + others
         definesPresentationContext = true
+        
+        // Set FRC
+        segmentChanged(segmentControl)
+        
     }
     
     @IBAction func addButtonPressed(sender: UIBarButtonItem) {
-        _ = Trip(owned: true)
+        CDManager.sharedInstance.createTrip(nil, owned: true)
+        segmentControl.selectedSegmentIndex = 1
+        segmentChanged(segmentControl)
     }
+    
+    @IBAction func segmentChanged(sender: UISegmentedControl) {
+        setFetchedResultController(sender.selectedSegmentIndex == 0)
+        tableView.tableHeaderView = sender.selectedSegmentIndex == 0 ? searchController.searchBar : nil
+    }
+    
+    func setFetchedResultController(subscribed: Bool) {
+        let fetchRequest = NSFetchRequest(entityName: "Trip")
+        fetchRequest.predicate = NSPredicate(format: "owned = %@", !subscribed)
+        let sortDescriptor = NSSortDescriptor(key: "title", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        
+        _ = try? fetchedResultsController.performFetch()
+        fetchedResultsController.delegate = self
+
+        tableView.reloadData()
+    }
+    
+    
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "TripSegue" {
@@ -148,10 +158,9 @@ extension TripsTableViewController {
     }
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        
         if editingStyle == .Delete {
-            
             guard let trip = fetchedResultsController.objectAtIndexPath(indexPath) as? Trip else { return }
-            
             // Remove from local store
             CDManager.sharedInstance.deleteTrip(trip)
             
@@ -181,6 +190,8 @@ extension TripsTableViewController: NSFetchedResultsControllerDelegate {
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
 
+        print("change object")
+        
         switch type {
         case .Insert:
             tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
@@ -190,7 +201,7 @@ extension TripsTableViewController: NSFetchedResultsControllerDelegate {
             tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
             tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
         case .Update:
-            tableView.cellForRowAtIndexPath(indexPath!)
+            tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
         }
     }
 }

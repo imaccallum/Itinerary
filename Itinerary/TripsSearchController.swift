@@ -40,30 +40,57 @@ extension TripsSearchController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         let trip = filteredResults[indexPath.row]
-        let title = trip.title ?? "Unknown trip"
-        var message = ""
         
         // Check if trip exists
-        if let _ = CDManager.sharedInstance.fetchTrip(trip.recordID) {
-            message = "Already subscribed to: \(title)"
-        } else {
-            // Create and subscribe
-            CKManager.sharedInstance.subscribeToTrip(trip.recordID) { success in
-                if success {
-                    _ = Trip(trip: trip, owned: false)
+        if let cdtrip = CDManager.sharedInstance.fetchTrip(trip.recordID) {
+            
+            // Prompt for Unsubscribe
+            let alertController = UIAlertController(title: "Alert!", message: "Do you want to unsubsribe to this trip?", preferredStyle: .Alert)
+            let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { alertAction in }
+            let unsubscribeAction = UIAlertAction(title: "Unsubscribe", style: .Destructive) { alertAction in
+                
+                dispatchMainQueue {
+                    CDManager.sharedInstance.deleteTrip(cdtrip)
+                    CKManager.sharedInstance.unsubscribeToTrip(cdtrip.recordID)
+                    self.tableView.reloadData()
                 }
             }
             
-            message = "Subscribed to: \(title)"
+            alertController.addAction(cancelAction)
+            alertController.addAction(unsubscribeAction)
+
+            presentViewController(alertController, animated: true) {}
+            
+        } else {
+            
+            // Create and subscribe
+            CKManager.sharedInstance.subscribeToTrip(trip.recordID) { success in
+                var message = ""
+                
+                if success {
+                    CDManager.sharedInstance.createTrip(trip.record, owned: false)
+                    message = "Successfully subscribed to trip."
+                } else {
+                    message = "Unable to subscribe to trip."
+                }
+                
+                let alertController = UIAlertController(title: "Alert!", message: message, preferredStyle: .Alert)
+                let dismissAction = UIAlertAction(title: "Dismiss", style: .Cancel) { alertAction in }
+                alertController.addAction(dismissAction)
+
+                
+                dispatchMainQueue {
+                    self.presentViewController(alertController, animated: true) {}
+                    self.tableView.reloadData()
+                }
+            }
         }
-        
-        // Alert User
+    }
+
+    func alertController(message: String) -> UIAlertController {
         let alertController = UIAlertController(title: "Alert!", message: message, preferredStyle: .Alert)
         let cancelAction = UIAlertAction(title: "Dismiss", style: .Cancel) { alertAction in }
         alertController.addAction(cancelAction)
-        presentViewController(alertController, animated: true) {
-            self.dismissBlock?()
-        }
-
+        return alertController
     }
 }

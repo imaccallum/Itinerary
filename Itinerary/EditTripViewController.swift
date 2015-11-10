@@ -113,10 +113,11 @@ extension EditTripViewController: UITableViewDelegate {
         if editingStyle == .Delete {
             
             // Remove from local and cloud store
-            let id = event.recordID
+            guard let id = event.recordID else { return }
             CDManager.sharedInstance.deleteEvent(id)
             CKManager.sharedInstance.deleteEvent(id)
         }
+        
     }
 }
 

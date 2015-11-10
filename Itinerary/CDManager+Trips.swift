@@ -13,10 +13,14 @@ import CoreData
 // MARK: - Trip CRUD
 extension CDManager {
     // Create
-    func createTrip(record: CKRecord, owned: Bool) {
+    func createTrip(record: CKRecord?, owned: Bool) {
         let newTrip = NSEntityDescription.insertNewObjectForEntityForName("Trip", inManagedObjectContext: context) as! Trip
         newTrip.owned = owned
-        updateTrip(newTrip, withRecord: record)
+        
+        if let record = record {
+            updateTrip(newTrip, withRecord: record)
+        }
+        
         saveContext()
     }
     
@@ -32,20 +36,19 @@ extension CDManager {
     
     // Update
     func updateTrip(trip: Trip, withRecord record: CKRecord) {
-        print("updating trip")
         let cktrip = CKTrip(record: record)
         
         trip.title = cktrip.title
         trip.recordID = cktrip.recordID
         
-        saveContext()
+        CKManager.sharedInstance.fetchEvents(forTripID: cktrip.recordID) { records in
+            records.forEach { CDManager.sharedInstance.createOrUpdateEvent($0, forTripID: cktrip.recordID) }
+        }
     }
     
     func handleTrip(id: CKRecordID) {
         CKManager.sharedInstance.fetchTrip(id) { record in
             guard let record = record else { return }
-            print("handling trip")
-            
             
             if let trip = self.fetchTrip(id) {
                 self.updateTrip(trip, withRecord: record)
@@ -69,7 +72,6 @@ extension CDManager {
         trip.events?.forEach { CDManager.sharedInstance.deleteEvent($0.recordID) }
         // Delete trip
         CDManager.sharedInstance.context.deleteObject(trip)
-        saveContext()
     }
     
     // Create or Update

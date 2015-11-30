@@ -38,6 +38,8 @@
 		826418991BB9B0EE003771EB /* CKTrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826418981BB9B0EE003771EB /* CKTrip.swift */; };
 		8264189C1BB9B612003771EB /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264189B1BB9B612003771EB /* Extensions.swift */; };
 		8264189E1BB9CE51003771EB /* EditTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264189D1BB9CE51003771EB /* EditTripViewController.swift */; };
+		828AD0C71C0C2B37009CBAD5 /* Extensions+EventKit .swift in Sources */ = {isa = PBXBuildFile; fileRef = 828AD0C61C0C2B37009CBAD5 /* Extensions+EventKit .swift */; };
+		829A11861BFEE974003E7923 /* CAManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829A11851BFEE974003E7923 /* CAManager.swift */; };
 		82A312F21BDD6C890029A506 /* Extensions+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A312F11BDD6C890029A506 /* Extensions+Foundation.swift */; };
 /* End PBXBuildFile section */
 
@@ -76,6 +78,8 @@
 		826418981BB9B0EE003771EB /* CKTrip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CKTrip.swift; path = ../CKTrip.swift; sourceTree = "<group>"; };
 		8264189B1BB9B612003771EB /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		8264189D1BB9CE51003771EB /* EditTripViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditTripViewController.swift; sourceTree = "<group>"; };
+		828AD0C61C0C2B37009CBAD5 /* Extensions+EventKit .swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extensions+EventKit .swift"; sourceTree = "<group>"; };
+		829A11851BFEE974003E7923 /* CAManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAManager.swift; sourceTree = "<group>"; };
 		82A312F11BDD6C890029A506 /* Extensions+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extensions+Foundation.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -126,8 +130,9 @@
 				822143F11BC4490A006623CC /* UITableViewCell Subclasses */,
 				826418941BB8D6EC003771EB /* NSManagedObject Subclasses */,
 				825010B41BCD61B30086E44F /* CKRecord Subclasses */,
-				825010E71BCDA8010086E44F /* CKManager */,
-				825010E81BCDA80E0086E44F /* CDManager */,
+				825010E71BCDA8010086E44F /* CloudKit Manager */,
+				825010E81BCDA80E0086E44F /* CoreData Manager */,
+				829A11841BFEE949003E7923 /* Calendar Manager */,
 				822DCBC41BB3679000C24F25 /* AppDelegate.swift */,
 				8240EF131BCD5C1F00D24598 /* AppDelegate+Notifications.swift */,
 				825010EB1BCDE1030086E44F /* Notes */,
@@ -170,7 +175,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		825010E71BCDA8010086E44F /* CKManager */ = {
+		825010E71BCDA8010086E44F /* CloudKit Manager */ = {
 			isa = PBXGroup;
 			children = (
 				8240EF151BCD5C6000D24598 /* CKManager.swift */,
@@ -178,17 +183,17 @@
 				825010E31BCDA7E80086E44F /* CKManager+Trips.swift */,
 				825010E51BCDA7F50086E44F /* CKManager+Events.swift */,
 			);
-			name = CKManager;
+			name = "CloudKit Manager";
 			sourceTree = "<group>";
 		};
-		825010E81BCDA80E0086E44F /* CDManager */ = {
+		825010E81BCDA80E0086E44F /* CoreData Manager */ = {
 			isa = PBXGroup;
 			children = (
 				8240EF161BCD5C6000D24598 /* CDManager.swift */,
 				825010EF1BCF23910086E44F /* CDManager+Trips.swift */,
 				825010ED1BCF23830086E44F /* CDManager+Events.swift */,
 			);
-			name = CDManager;
+			name = "CoreData Manager";
 			sourceTree = "<group>";
 		};
 		826418941BB8D6EC003771EB /* NSManagedObject Subclasses */ = {
@@ -209,8 +214,17 @@
 				8264189B1BB9B612003771EB /* Extensions.swift */,
 				82A312F11BDD6C890029A506 /* Extensions+Foundation.swift */,
 				8206D5691BEFB39C00FFF344 /* Extensions+NSDate.swift */,
+				828AD0C61C0C2B37009CBAD5 /* Extensions+EventKit .swift */,
 			);
 			name = Extensions;
+			sourceTree = "<group>";
+		};
+		829A11841BFEE949003E7923 /* Calendar Manager */ = {
+			isa = PBXGroup;
+			children = (
+				829A11851BFEE974003E7923 /* CAManager.swift */,
+			);
+			name = "Calendar Manager";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -294,11 +308,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				829A11861BFEE974003E7923 /* CAManager.swift in Sources */,
 				826418901BB8D6E4003771EB /* Trip+CoreDataProperties.swift in Sources */,
 				8264189C1BB9B612003771EB /* Extensions.swift in Sources */,
 				826418931BB8D6E4003771EB /* Event.swift in Sources */,
 				825010EE1BCF23830086E44F /* CDManager+Events.swift in Sources */,
 				826418871BB8C7A9003771EB /* TripsTableViewController.swift in Sources */,
+				828AD0C71C0C2B37009CBAD5 /* Extensions+EventKit .swift in Sources */,
 				822143F31BC4494A006623CC /* TripSearchCell.swift in Sources */,
 				825010E21BCDA7370086E44F /* CKManager+Subscriptions.swift in Sources */,
 				825010E01BCD82120086E44F /* TripsSearchController.swift in Sources */,
@@ -470,7 +486,7 @@
 				822DCBD51BB3679000C24F25 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		822DCBD61BB3679000C24F25 /* Build configuration list for PBXNativeTarget "Itinerary" */ = {
 			isa = XCConfigurationList;
@@ -479,7 +495,7 @@
 				822DCBD81BB3679000C24F25 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 

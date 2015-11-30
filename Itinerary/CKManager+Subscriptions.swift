@@ -14,10 +14,9 @@ extension CKManager {
         let predicate = NSPredicate(format: "recordID = %@", recordID)
         let subscription = CKSubscription(recordType: "Trip",
             predicate: predicate,
-            options: [.FiresOnRecordCreation, .FiresOnRecordDeletion, .FiresOnRecordUpdate])
-        
+            options: [.FiresOnRecordDeletion, .FiresOnRecordUpdate])
         let notificationInfo = CKNotificationInfo()
-        notificationInfo.alertBody = "An event has been modified!"
+        notificationInfo.alertBody = "Trip"
         notificationInfo.alertLocalizationKey = "%@"
         notificationInfo.alertLocalizationArgs = ["title"]
         notificationInfo.shouldBadge = false
@@ -34,7 +33,7 @@ extension CKManager {
             options: [.FiresOnRecordCreation, .FiresOnRecordDeletion, .FiresOnRecordUpdate])
         
         let notificationInfo = CKNotificationInfo()
-        notificationInfo.alertBody = "An event has been modified!"
+        notificationInfo.alertBody = "Event"
         notificationInfo.alertLocalizationKey = "%@"
         notificationInfo.alertLocalizationArgs = ["title"]
         notificationInfo.shouldBadge = false
@@ -47,7 +46,7 @@ extension CKManager {
     func subscribeToTrip(id: CKRecordID?, completion: (Bool -> Void)?) {
         print("subscribe")
         guard let id = id else { return }
-        
+        print(id)
         let tripSubscription = subscription(forRecordWithID: id)
         let eventsSubscription = subscription(forEventsWithTripID: id)
         
@@ -55,7 +54,7 @@ extension CKManager {
             
             
             CKManager.sharedInstance.publicDatabase.saveSubscription(eventsSubscription) { eventsSubscription, eventsError in
-                
+                print(tripError, eventsError)
                 guard let tripError = tripError, eventsError = eventsError else {
                     completion?(true)
                     return

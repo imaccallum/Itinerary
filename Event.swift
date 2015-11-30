@@ -22,4 +22,19 @@ class Event: NSManagedObject {
         guard let lastUpdated = lastUpdated else { return true }
         return lastUpdated > lastPublished
     }
+    
+    var detailDescription: String {
+        var text = ""
+        guard let start = start else { return text }
+        
+        let formatter = NSDateFormatter()
+        formatter.timeStyle = .ShortStyle
+        formatter.dateStyle = .MediumStyle
+        
+        text += formatter.stringFromDate(start)
+        
+        guard let end = end else { return text }
+        text += " - \(formatter.stringFromDate(end))"
+        return text
+    }
 }

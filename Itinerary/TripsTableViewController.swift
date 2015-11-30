@@ -111,6 +111,7 @@ extension TripsTableViewController: UISearchResultsUpdating {
         let database = CKContainer.defaultContainer().publicCloudDatabase
     
         database.performQuery(query, inZoneWithID: nil) { records, error in
+            print(error?.localizedDescription)
             // Hand over the filtered results to our search results table.
             guard let records = records else { return }
             
@@ -137,6 +138,7 @@ extension TripsTableViewController {
         
         if let trip = fetchedResultsController.objectAtIndexPath(indexPath) as? Trip {
             cell.textLabel?.text = trip.title ?? "New Trip"
+            cell.detailTextLabel?.text = trip.location ?? nil
         }
         
         return cell

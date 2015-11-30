@@ -36,9 +36,11 @@ extension CDManager {
     
     // Update
     func updateTrip(trip: Trip, withRecord record: CKRecord) {
+        print("updating trip")
         let cktrip = CKTrip(record: record)
         
         trip.title = cktrip.title
+        trip.location = cktrip.location
         trip.recordID = cktrip.recordID
         
         CKManager.sharedInstance.fetchEvents(forTripID: cktrip.recordID) { records in

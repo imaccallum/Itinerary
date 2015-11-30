@@ -26,29 +26,28 @@ extension AppDelegate {
         
     }
     
+
+    
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
-        
+        print("NOTIFICATION")
+        print(application.applicationState.rawValue)
         guard application.applicationState == .Background || application.applicationState == .Active else {
             completionHandler(.NoData)
             return
         }
 
-        let token = NSUserDefaults.standardUserDefaults().dataObjectForKey("notificationChangeToken") as? CKServerChangeToken
-        print(token)
+        let notification = CKNotification(fromRemoteNotificationDictionary: userInfo as! [String: NSObject])
         
-        let operation = CKFetchNotificationChangesOperation(previousServerChangeToken: token)
+        print(notification.alertBody)
+//        if notification.alertBody == "Trip" {
+//            
+//        } else if notification.alertBody == "Event" {
+//            
+//        }
         
-        operation.fetchNotificationChangesCompletionBlock = { newToken, error in
-            guard let newToken = newToken else { return }
-            NSUserDefaults.standardUserDefaults().setDataObject(newToken, forKey: "notificationChangeToken")
-            completionHandler(.NewData)
-        }
-        
-        operation.notificationChangedBlock = { notification in
-            self.handleNotification(notification)
-        }
-        
-        CKContainer.defaultContainer().addOperation(operation)
+        notification.alertBody
+        handleNotification(notification)
+        completionHandler(.NewData)
     }
     
     func handleNotification(notification: CKNotification) {
@@ -56,11 +55,21 @@ extension AppDelegate {
         if notification.notificationType == .Query {
             let queryNotification = notification as! CKQueryNotification
             guard let id = queryNotification.recordID else { return }
-
+            print("query notification")
+            
+            
+            
             // Fetch Record to determine type
             CKManager.sharedInstance.publicDatabase.fetchRecordWithID(id) { record, error in
-                guard let record = record else { return }
+                print(error?.localizedDescription)
+                guard let record = record else {
+                    CDManager.sharedInstance.deleteEvent(id)
+                    CDManager.sharedInstance.deleteTrip(id)
+                    
+                    return
                 
+                }
+                print(record.recordType)
                 if record.recordType == "Trip" {
                     // Handle trip notification
                     self.handleTripNotification(queryNotification)
@@ -92,7 +101,7 @@ extension AppDelegate {
     
     func handleTripNotification(notification: CKQueryNotification) {
         guard let id = notification.recordID else { return }
-        
+
         switch notification.queryNotificationReason {
         case .RecordCreated:
             print("created")

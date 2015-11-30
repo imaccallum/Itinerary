@@ -26,8 +26,9 @@ class TripViewController: UIViewController {
         // Setup FRC
         let fetchRequest = NSFetchRequest(entityName: "Event")
         let predicate = NSPredicate(format: "trip = %@", trip)
-        let sortDescriptor = NSSortDescriptor(key: "title", ascending: false)
-        fetchRequest.sortDescriptors = [sortDescriptor]
+        let sortDescriptor0 = NSSortDescriptor(key: "start", ascending: true)
+        let sortDescriptor1 = NSSortDescriptor(key: "end", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor0, sortDescriptor1]
         fetchRequest.predicate = predicate
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CDManager.sharedInstance.context, sectionNameKeyPath: nil, cacheName: nil)
@@ -47,6 +48,7 @@ class TripViewController: UIViewController {
         
         // Delegation
         eventsTableView.dataSource = self
+        eventsTableView.delegate = self
         fetchedResultsController.delegate = self
         
         NSNotificationCenter.defaultCenter().addObserverForName(NSManagedObjectContextObjectsDidChangeNotification, object: nil, queue: nil) { notification in
@@ -73,9 +75,32 @@ class TripViewController: UIViewController {
 // MARK: - UITableViewDelegate
 extension TripViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        print("select row")
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
         guard let event = fetchedResultsController.objectAtIndexPath(indexPath) as? Event else { return }
-        performSegueWithIdentifier("EditTripSegue", sender: event)
+        
+        let alertController = UIAlertController(title: "Alert!", message: "Add event to calendar?", preferredStyle: .Alert)
+        
+        let allAction = UIAlertAction(title: "Add all events", style: .Default) { action in
+            let events = event.trip?.events?.allObjects as? [Event]
+            CAManager.sharedInstance.addAllEvents(events)
+        }
+        
+        let oneAction = UIAlertAction(title: "Add this event", style: .Default) { action in
+            CAManager.sharedInstance.addEvent(event)
+        }
+
+        let modalAction = UIAlertAction(title: "Edit and add this event", style: .Default) { action in
+            CAManager.sharedInstance.addEventModally(event, fromViewController: self)
+        }
+
+        let dismissAction = UIAlertAction(title: "Cancel", style: .Cancel) { action in }
+        
+        alertController.addAction(allAction)
+        alertController.addAction(oneAction)
+        alertController.addAction(modalAction)
+        alertController.addAction(dismissAction)
+        
+        presentViewController(alertController, animated: true) {}
     }
 }
 
@@ -89,6 +114,7 @@ extension TripViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCellWithIdentifier("EventCellID", forIndexPath: indexPath)
         if let event = fetchedResultsController.objectAtIndexPath(indexPath) as? Event {
             cell.textLabel?.text = event.title
+            cell.detailTextLabel?.text = event.detailDescription
         }
         
         return cell

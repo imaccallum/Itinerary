@@ -19,6 +19,7 @@ extension CDManager {
         updateEvent(newEvent, withRecord: record)
     }
     
+    
     // Read
     func fetchEvent(id: CKRecordID) -> Event? {
         
@@ -29,6 +30,7 @@ extension CDManager {
         
         return (try? context.executeFetchRequest(fetchRequest).first) as? Event
     }
+
     
     // Update
     func updateEvent(event: Event, withRecord record: CKRecord) {
@@ -40,6 +42,7 @@ extension CDManager {
         event.recordID = ckevent.recordID
     }
  
+    
     // Create or Update
     func createOrUpdateEvent(record: CKRecord, forTripID tripID: CKRecordID) {
         if let event = fetchEvent(record.recordID) {
@@ -48,6 +51,7 @@ extension CDManager {
             createEvent(record, forTripID: tripID)
         }
     }
+    
     
     // Delete
     func deleteEvent(id: CKRecordID) {

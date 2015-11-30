@@ -27,8 +27,9 @@ class EditTripViewController: UIViewController {
         // Setup FRC
         let fetchRequest = NSFetchRequest(entityName: "Event")
         let predicate = NSPredicate(format: "trip = %@", trip)
-        let sortDescriptor = NSSortDescriptor(key: "title", ascending: false)
-        fetchRequest.sortDescriptors = [sortDescriptor]
+        let sortDescriptor0 = NSSortDescriptor(key: "start", ascending: true)
+        let sortDescriptor1 = NSSortDescriptor(key: "end", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor0, sortDescriptor1]
         fetchRequest.predicate = predicate
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CDManager.sharedInstance.context, sectionNameKeyPath: nil, cacheName: nil)

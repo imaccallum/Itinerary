@@ -43,8 +43,9 @@ extension CKManager {
             var cktrip = CKTrip(record: record)
             cktrip.title = trip.title
             cktrip.location = trip.location
+            print(trip.events?.count)
             CKManager.sharedInstance.updateEvents(trip.events?.allObjects as? [Event] ?? [], forTripID: id)
-            
+        
             // Update record
             self.publicDatabase.saveRecord(cktrip.record) { savedRecord, error in
                 guard let savedRecord = savedRecord else { return }

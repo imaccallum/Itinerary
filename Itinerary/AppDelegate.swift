@@ -16,11 +16,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
-        
-        
-        
         // Register for Notifications
         registerForNotifications(application)
+        
+        // Check Permissions
+        CAManager.sharedInstance.checkAuthorizationStatus {}
         
         return true
     }

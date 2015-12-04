@@ -13,13 +13,8 @@ import CloudKit
 
 class Trip: NSManagedObject {
 
-    var needsPublish: Bool {
-        
-        print("updated: \(lastUpdated)")
-        print("published: \(lastPublished)")
-        
-        guard let lastPublished = lastPublished else { return true }
-        guard let lastUpdated = lastUpdated else { return true }
-        return lastUpdated > lastPublished
+    convenience init() {
+        let entity = NSEntityDescription.entityForName("Trip", inManagedObjectContext: CDManager.sharedInstance.context)!
+        self.init(entity: entity, insertIntoManagedObjectContext: CDManager.sharedInstance.context)
     }
 }

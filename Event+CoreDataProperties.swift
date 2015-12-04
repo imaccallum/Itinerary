@@ -20,9 +20,7 @@ extension Event {
     @NSManaged var end: NSDate?
     @NSManaged var recordID: CKRecordID?
     @NSManaged var trip: Trip?
-    
+
     // Owner info
     @NSManaged var owned: NSNumber?
-    @NSManaged var lastUpdated: NSDate?
-    @NSManaged var lastPublished: NSDate?
 }

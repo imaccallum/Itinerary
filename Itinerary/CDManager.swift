@@ -71,8 +71,7 @@ class CDManager {
                 try context.save()
             } catch {
                 let nserror = error as NSError
-                NSLog("Unresolved error \(nserror), \(nserror.userInfo)")
-                abort()
+                NSLog("Unresolved error \(nserror.localizedDescription), \(nserror.userInfo)")
             }
         }
     }    

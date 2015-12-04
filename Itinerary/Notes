@@ -2,9 +2,3 @@ BUGS
 
 
 NOTES
-
-1. Create a CDEvent
-2. Attempt to save CKEvent with CKReference to CKTrip
-3. If success, set recordID for event
-4. If failure, delete the CDEvent
-5. Possibly put it on a queue to be synched

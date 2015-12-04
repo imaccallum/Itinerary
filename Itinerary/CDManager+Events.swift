@@ -17,6 +17,7 @@ extension CDManager {
         let newEvent = NSEntityDescription.insertNewObjectForEntityForName("Event", inManagedObjectContext: context) as! Event
         newEvent.trip = fetchTrip(tripID)
         updateEvent(newEvent, withRecord: record)
+        saveContext()
     }
     
     
@@ -40,6 +41,8 @@ extension CDManager {
         event.start = ckevent.start
         event.end = ckevent.end
         event.recordID = ckevent.recordID
+        
+        saveContext()
     }
  
     
@@ -56,8 +59,30 @@ extension CDManager {
     // Delete
     func deleteEvent(id: CKRecordID) {
         if let event = fetchEvent(id) {
-            CDManager.sharedInstance.context.deleteObject(event)
-            saveContext()
+            deleteEvent(event)
         }
     }
+    
+    func deleteEvent(event: Event) {
+        // Delete event
+        CDManager.sharedInstance.context.deleteObject(event)
+        saveContext()
+    }
+    
+    func deleteAllEvents(forTrip trip: Trip, exceptForIDs ids: [CKRecordID]) {
+        let fetchRequest = NSFetchRequest(entityName: "Event")
+        let predicate0 = NSPredicate(format: "trip = %@", trip)
+        let predicate1 = NSPredicate(format: "NOT recordID IN %@", ids)
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate0, predicate1])
+        
+        fetchRequest.predicate = predicate
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        _ = try? frc.performFetch()
+        
+        let outdatedEvents = frc.fetchedObjects as? [Event]
+        outdatedEvents?.forEach { deleteEvent($0) }
+    }
+
 }

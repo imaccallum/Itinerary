@@ -9,18 +9,12 @@
 import Foundation
 import CoreData
 
+
 class Event: NSManagedObject {
 
     convenience init() {
         let entity = NSEntityDescription.entityForName("Event", inManagedObjectContext: CDManager.sharedInstance.context)!
         self.init(entity: entity, insertIntoManagedObjectContext: CDManager.sharedInstance.context)
-    }
-    
-    
-    var needsPublish: Bool {
-        guard let lastPublished = lastPublished else { return true }
-        guard let lastUpdated = lastUpdated else { return true }
-        return lastUpdated > lastPublished
     }
     
     var detailDescription: String {
@@ -36,5 +30,20 @@ class Event: NSManagedObject {
         guard let end = end else { return text }
         text += " - \(formatter.stringFromDate(end))"
         return text
+    }
+    
+    var section: String? {
+        
+        let date = NSDate()
+        
+        if date < start {
+            return "Upcoming"
+        } else if date >= start && date <= end {
+            return "In Progress"
+        } else if date > end {
+            return "Past"
+        } else {
+            return "Other"
+        }
     }
 }

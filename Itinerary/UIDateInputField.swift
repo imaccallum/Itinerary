@@ -11,17 +11,21 @@ import UIKit
 
 class UIDateInputField: UITextField {
     private var previousDate: NSDate?
-    private var previousText: String?
-    var date: NSDate?
+    let datePicker = UIDatePicker()
+    var date: NSDate? {
+        didSet {
+            print("didSet \(date)")
+            text = stringFromDate(date)
+        }
+    }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         delegate = self
         
-        
-        let datePicker = UIDatePicker()
         datePicker.datePickerMode = .DateAndTime
         datePicker.addTarget(self, action: "datePickerValueChanged:", forControlEvents: .ValueChanged)
+        
         inputView = datePicker
         
         let toolbar = UIToolbar()
@@ -35,21 +39,19 @@ class UIDateInputField: UITextField {
     }
     
     func cancelButtonPressed(sender: UIBarButtonItem) {
-        print("cancel")
-        resignFirstResponder()
-        
         // Resets date property
         date = previousDate
-        text = previousText
+        resignFirstResponder()
     }
     
     func doneButtonPressed(sender: UIBarButtonItem) {
+        // Sets date property and text
+        date = datePicker.date
         resignFirstResponder()
     }
     
     func datePickerValueChanged(sender: UIDatePicker) {
-        text = stringFromDate(sender.date)
-        date = sender.date
+        date = datePicker.date
     }
     
     func stringFromDate(date: NSDate?) -> String? {
@@ -63,9 +65,20 @@ class UIDateInputField: UITextField {
 
 extension UIDateInputField: UITextFieldDelegate {
     func textFieldDidBeginEditing(textField: UITextField) {
+        if date == nil {
+            let components = NSCalendar.currentCalendar().components([.Year, .Month, .Day, .Hour], fromDate: NSDate())
+            let d = NSCalendar.currentCalendar().dateFromComponents(components)
+            print(d)
+            date = d
+        }
+
+        guard let date = date else { return }
+        
+        
         previousDate = date
-        previousText = text
+        datePicker.date = date
     }
+    
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         return false

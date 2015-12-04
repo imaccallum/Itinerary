@@ -2,8 +2,8 @@
 //  CAManager.swift
 //  Itinerary
 //
-//  Created by Ian MacCallum on 11/20/15.
-//  Copyright © 2015 Ian MacCallum. All rights reserved.
+//  Created by Edward Tischler on 11/20/15.
+//  Copyright © 2015 Edward Tischler. All rights reserved.
 //
 
 import Foundation
@@ -16,7 +16,7 @@ class CAManager: NSObject {
     var store = EKEventStore()
 
 
-    func checkAuthorizationStatus(completion: () -> ()) {
+    func checkAuthorizationStatus(completion: Block) {
         let status = EKEventStore.authorizationStatusForEntityType(.Event)
         
         if status == .Authorized {

@@ -21,3 +21,25 @@ extension NSUserDefaults {
         return NSKeyedUnarchiver.unarchiveObjectWithData(data)
     }
 }
+
+extension NSDate: Comparable {
+    
+}
+
+func + (date: NSDate, timeInterval: NSTimeInterval) -> NSDate {
+    return date.dateByAddingTimeInterval(timeInterval)
+}
+
+public func ==(lhs: NSDate, rhs: NSDate) -> Bool {
+    if lhs.compare(rhs) == .OrderedSame {
+        return true
+    }
+    return false
+}
+
+public func <(lhs: NSDate, rhs: NSDate) -> Bool {
+    if lhs.compare(rhs) == .OrderedAscending {
+        return true
+    }
+    return false
+}

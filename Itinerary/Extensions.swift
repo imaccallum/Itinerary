@@ -8,7 +8,7 @@
 
 import Foundation
 
-func dispatchMainQueue(block: () -> ()) {
+func dispatchMainQueue(block: Block) {
     dispatch_async(dispatch_get_main_queue()) {
         block()
     }

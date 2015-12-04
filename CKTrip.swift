@@ -23,6 +23,7 @@ struct CKTrip {
         self.init()
         title = trip.title
         location = trip.location
+        password = trip.password
     }
     
     init() {
@@ -51,4 +52,15 @@ struct CKTrip {
     var isPrivate: Bool {
         return !(password ?? "").isEmpty
     }
+}
+
+extension CKTrip: Equatable {
+    
+}
+
+func ==(lhs: CKTrip, rhs: CKTrip) -> Bool {
+    if lhs.record == rhs.record {
+        return true
+    }
+    return false
 }

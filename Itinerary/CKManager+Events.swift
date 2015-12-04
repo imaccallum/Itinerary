@@ -20,15 +20,16 @@ extension CKManager {
             ckevent.trip = CKReference(recordID: id, action: .DeleteSelf)
             
             publicDatabase.saveRecord(ckevent.record) { record, error in
+                print(error?.localizedDescription)
                 event.recordID = record?.recordID
-                event.lastPublished = NSDate()
+                CDManager.sharedInstance.saveContext()
             }
         }
     }
 
 
     // Read
-    func fetchEvents(forTripID tripID: CKRecordID, cursor: CKQueryCursor? = nil, fetchedRecords: [CKRecord] = [], completion: ([CKRecord] -> Void)?) {
+    func fetchEvents(forTripID tripID: CKRecordID, cursor: CKQueryCursor? = nil, fetchedRecords: [CKRecord] = [], completion: RecordsBlock?) {
         
         var records = fetchedRecords
         var operation: CKQueryOperation!
@@ -44,6 +45,7 @@ extension CKManager {
         
         operation.recordFetchedBlock = { record in
             records.append(record)
+            print("new event record")
         }
         
         operation.queryCompletionBlock = { cursor, error in
@@ -57,7 +59,7 @@ extension CKManager {
         CKManager.sharedInstance.publicDatabase.addOperation(operation)
     }
     
-    func fetchEvent(id: CKRecordID, completion: (CKRecord? -> ())?) {
+    func fetchEvent(id: CKRecordID, completion: RecordBlock?) {
         publicDatabase.fetchRecordWithID(id) { record, error in
             completion?(record)
         }
@@ -68,27 +70,35 @@ extension CKManager {
     func updateEvents(events: [Event], forTripID tripID: CKRecordID) {
 
         for event in events {
+            
+            // Creat event if it doesn't exist
             guard let id = event.recordID else {
+                print("creating event")
                 createEvents([event], forTripID: tripID)
                 continue
             }
             
+            
+            // Fetch evevent to update it
             fetchEvent(id) { record in
                 guard let record = record else { return }
                 
-                // Set properties on record
                 var ckevent = CKEvent(record: record)
-                ckevent.title = event.title
-                ckevent.start = event.start
-                ckevent.end = event.end
-
                 
-                // Update record
-                self.publicDatabase.saveRecord(ckevent.record) { savedRecord, error in
-                    guard let savedRecord = savedRecord else { return }
+                if ckevent.title != event.title || ckevent.start != event.start || ckevent.end != event.end {
                     
-                    let savedEvent = CDManager.sharedInstance.fetchEvent(savedRecord.recordID)
-                    savedEvent?.lastPublished = NSDate()
+                    // Set properties on record
+                    ckevent.title = event.title
+                    ckevent.start = event.start
+                    ckevent.end = event.end
+
+                    print("events are not equal")
+                    // Update record
+                    self.publicDatabase.saveRecord(ckevent.record) { savedRecord, error in
+                        print(error?.localizedDescription)
+                    }
+                } else {
+                    print("\(event.title) is equal")
                 }
             }
         }

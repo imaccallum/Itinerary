@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8206D56A1BEFB39C00FFF344 /* Extensions+NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8206D5691BEFB39C00FFF344 /* Extensions+NSDate.swift */; };
 		822143F31BC4494A006623CC /* TripSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822143F21BC4494A006623CC /* TripSearchCell.swift */; };
 		822143F51BC4497D006623CC /* TripSearchCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 822143F41BC4497D006623CC /* TripSearchCell.xib */; };
 		822DCBC51BB3679000C24F25 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822DCBC41BB3679000C24F25 /* AppDelegate.swift */; };
@@ -38,13 +37,14 @@
 		826418991BB9B0EE003771EB /* CKTrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826418981BB9B0EE003771EB /* CKTrip.swift */; };
 		8264189C1BB9B612003771EB /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264189B1BB9B612003771EB /* Extensions.swift */; };
 		8264189E1BB9CE51003771EB /* EditTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264189D1BB9CE51003771EB /* EditTripViewController.swift */; };
+		827A71FA1C0CD28100BF399A /* Extensions+CloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827A71F91C0CD28100BF399A /* Extensions+CloudKit.swift */; };
+		827A71FC1C0E1A4F00BF399A /* Extensions+UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827A71FB1C0E1A4F00BF399A /* Extensions+UIKit.swift */; };
 		828AD0C71C0C2B37009CBAD5 /* Extensions+EventKit .swift in Sources */ = {isa = PBXBuildFile; fileRef = 828AD0C61C0C2B37009CBAD5 /* Extensions+EventKit .swift */; };
 		829A11861BFEE974003E7923 /* CAManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829A11851BFEE974003E7923 /* CAManager.swift */; };
 		82A312F21BDD6C890029A506 /* Extensions+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A312F11BDD6C890029A506 /* Extensions+Foundation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8206D5691BEFB39C00FFF344 /* Extensions+NSDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extensions+NSDate.swift"; sourceTree = "<group>"; };
 		822143F21BC4494A006623CC /* TripSearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripSearchCell.swift; sourceTree = "<group>"; };
 		822143F41BC4497D006623CC /* TripSearchCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TripSearchCell.xib; sourceTree = "<group>"; };
 		822DCBC11BB3679000C24F25 /* Itinerary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Itinerary.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,6 +78,8 @@
 		826418981BB9B0EE003771EB /* CKTrip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CKTrip.swift; path = ../CKTrip.swift; sourceTree = "<group>"; };
 		8264189B1BB9B612003771EB /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		8264189D1BB9CE51003771EB /* EditTripViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditTripViewController.swift; sourceTree = "<group>"; };
+		827A71F91C0CD28100BF399A /* Extensions+CloudKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extensions+CloudKit.swift"; sourceTree = "<group>"; };
+		827A71FB1C0E1A4F00BF399A /* Extensions+UIKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extensions+UIKit.swift"; sourceTree = "<group>"; };
 		828AD0C61C0C2B37009CBAD5 /* Extensions+EventKit .swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extensions+EventKit .swift"; sourceTree = "<group>"; };
 		829A11851BFEE974003E7923 /* CAManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAManager.swift; sourceTree = "<group>"; };
 		82A312F11BDD6C890029A506 /* Extensions+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extensions+Foundation.swift"; sourceTree = "<group>"; };
@@ -213,8 +215,9 @@
 			children = (
 				8264189B1BB9B612003771EB /* Extensions.swift */,
 				82A312F11BDD6C890029A506 /* Extensions+Foundation.swift */,
-				8206D5691BEFB39C00FFF344 /* Extensions+NSDate.swift */,
+				827A71FB1C0E1A4F00BF399A /* Extensions+UIKit.swift */,
 				828AD0C61C0C2B37009CBAD5 /* Extensions+EventKit .swift */,
+				827A71F91C0CD28100BF399A /* Extensions+CloudKit.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -318,17 +321,18 @@
 				822143F31BC4494A006623CC /* TripSearchCell.swift in Sources */,
 				825010E21BCDA7370086E44F /* CKManager+Subscriptions.swift in Sources */,
 				825010E01BCD82120086E44F /* TripsSearchController.swift in Sources */,
-				8206D56A1BEFB39C00FFF344 /* Extensions+NSDate.swift in Sources */,
 				822DCBCD1BB3679000C24F25 /* Itinerary.xcdatamodeld in Sources */,
 				8240EF171BCD5C6000D24598 /* CKManager.swift in Sources */,
 				825010DE1BCD7B1F0086E44F /* EditEventViewController.swift in Sources */,
 				826418911BB8D6E4003771EB /* Trip.swift in Sources */,
+				827A71FA1C0CD28100BF399A /* Extensions+CloudKit.swift in Sources */,
 				825010DA1BCD79880086E44F /* UIDateInputField.swift in Sources */,
 				82A312F21BDD6C890029A506 /* Extensions+Foundation.swift in Sources */,
 				825010E41BCDA7E80086E44F /* CKManager+Trips.swift in Sources */,
 				825010E61BCDA7F50086E44F /* CKManager+Events.swift in Sources */,
 				825010F01BCF23910086E44F /* CDManager+Trips.swift in Sources */,
 				825010EA1BCDB1310086E44F /* TripViewController.swift in Sources */,
+				827A71FC1C0E1A4F00BF399A /* Extensions+UIKit.swift in Sources */,
 				8240EF1A1BCD5D9A00D24598 /* CKEvent.swift in Sources */,
 				826418921BB8D6E4003771EB /* Event+CoreDataProperties.swift in Sources */,
 				826418991BB9B0EE003771EB /* CKTrip.swift in Sources */,

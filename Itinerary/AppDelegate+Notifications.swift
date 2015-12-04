@@ -39,11 +39,6 @@ extension AppDelegate {
         let notification = CKNotification(fromRemoteNotificationDictionary: userInfo as! [String: NSObject])
         
         print(notification.alertBody)
-//        if notification.alertBody == "Trip" {
-//            
-//        } else if notification.alertBody == "Event" {
-//            
-//        }
         
         notification.alertBody
         handleNotification(notification)

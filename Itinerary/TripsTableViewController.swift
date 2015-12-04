@@ -2,8 +2,8 @@
 //  TripsViewController.swift
 //  Itinerary
 //
-//  Created by Ian MacCallum on 9/27/15.
-//  Copyright © 2015 Ian MacCallum. All rights reserved.
+//  Created by Edward Tischler on 9/27/15.
+//  Copyright © 2015 Edward Tischler. All rights reserved.
 //
 
 import Foundation
@@ -18,7 +18,7 @@ class TripsTableViewController: UITableViewController {
     var fetchedResultsController: NSFetchedResultsController!
     var searchController: UISearchController!
     var searchResultsController: TripsSearchController!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -41,7 +41,12 @@ class TripsTableViewController: UITableViewController {
     }
     
     @IBAction func addButtonPressed(sender: UIBarButtonItem) {
-        CDManager.sharedInstance.createTrip(nil, owned: true)
+        
+        let trip = Trip()
+        trip.owned = true
+        performSegueWithIdentifier("EditNewTripSegue", sender: trip)
+
+        
         segmentControl.selectedSegmentIndex = 1
         segmentChanged(segmentControl)
     }
@@ -70,6 +75,23 @@ class TripsTableViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "TripSegue" {
             guard let destination = segue.destinationViewController as? TripViewController, trip = sender as? Trip else { return }
+            destination.trip = trip
+        } else if segue.identifier == "EditNewTripSegue" {
+            guard let destination = (segue.destinationViewController as? UINavigationController)?.viewControllers.first as? EditTripViewController, trip = sender as? Trip else { return }
+
+            
+            let fetchRequest = NSFetchRequest(entityName: "Event")
+            let predicate = NSPredicate(format: "trip = %@", trip)
+            let sortDescriptor0 = NSSortDescriptor(key: "start", ascending: true)
+            let sortDescriptor1 = NSSortDescriptor(key: "end", ascending: true)
+            fetchRequest.sortDescriptors = [sortDescriptor0, sortDescriptor1]
+            fetchRequest.predicate = predicate
+            
+            let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CDManager.sharedInstance.context, sectionNameKeyPath: nil, cacheName: nil)
+            
+            _ = try? frc.performFetch()
+            
+            destination.fetchedResultsController = frc
             destination.trip = trip
         }
     }

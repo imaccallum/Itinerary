@@ -43,7 +43,7 @@ extension CKManager {
         return subscription
     }
     
-    func subscribeToTrip(id: CKRecordID?, completion: (Bool -> Void)?) {
+    func subscribeToTrip(id: CKRecordID?, completion: SuccessBlock?) {
         print("subscribe")
         guard let id = id else { return }
         print(id)

@@ -33,7 +33,7 @@ extension CDManager {
         
         return (try? context.executeFetchRequest(fetchRequest).first) as? Trip
     }
-    
+        
     // Update
     func updateTrip(trip: Trip, withRecord record: CKRecord) {
         print("updating trip")
@@ -41,11 +41,23 @@ extension CDManager {
         
         trip.title = cktrip.title
         trip.location = cktrip.location
+        trip.password = cktrip.password
         trip.recordID = cktrip.recordID
         
+        
+        guard let id = trip.recordID else { return }
+        
         CKManager.sharedInstance.fetchEvents(forTripID: cktrip.recordID) { records in
-            records.forEach { CDManager.sharedInstance.createOrUpdateEvent($0, forTripID: cktrip.recordID) }
+            
+            // Remove outdated events
+            let ids = records.map { $0.recordID }
+            CDManager.sharedInstance.deleteAllEvents(forTrip: trip, exceptForIDs: ids)
+            
+            // Create or update other trips
+            records.forEach { CDManager.sharedInstance.createOrUpdateEvent($0, forTripID: id) }
         }
+        
+        saveContext()
     }
     
     func handleTrip(id: CKRecordID) {
@@ -71,10 +83,25 @@ extension CDManager {
     
     func deleteTrip(trip: Trip) {
         // Delete all events
-        trip.events?.forEach { CDManager.sharedInstance.deleteEvent($0.recordID) }
+        (trip.events?.allObjects as? [Event])?.forEach { CDManager.sharedInstance.deleteEvent($0) }
         // Delete trip
         CDManager.sharedInstance.context.deleteObject(trip)
+        saveContext()
     }
+    
+    func deleteAllTrips(exceptForIDs ids: [CKRecordID]) {
+        let fetchRequest = NSFetchRequest(entityName: "Trip")
+        
+        fetchRequest.predicate = NSPredicate(format: "NOT recordID IN %@", ids)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        _ = try? frc.performFetch()
+        
+        let outdatedEvents = frc.fetchedObjects as? [Trip]
+        outdatedEvents?.forEach { deleteTrip($0) }
+    }
+
     
     // Create or Update
     func createOrUpdateTrip(record: CKRecord) {

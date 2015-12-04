@@ -17,8 +17,7 @@ extension Trip {
     @NSManaged var title: String?
     @NSManaged var recordID: CKRecordID?
     @NSManaged var location: String?
+    @NSManaged var password: String?
     @NSManaged var events: NSSet?
     @NSManaged var owned: NSNumber?
-    @NSManaged var lastUpdated: NSDate?
-    @NSManaged var lastPublished: NSDate?
 }

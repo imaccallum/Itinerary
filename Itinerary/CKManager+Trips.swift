@@ -17,7 +17,8 @@ extension CKManager {
         
         publicDatabase.saveRecord(cktrip.record) { record, error in
             trip.recordID = record?.recordID
-            trip.lastPublished = NSDate()
+            CDManager.sharedInstance.saveContext()
+
             let events = trip.events?.allObjects as? [Event] ?? []
             self.createEvents(events, forTripID: record?.recordID)
         }
@@ -25,7 +26,7 @@ extension CKManager {
 
     
     // Read
-    func fetchTrip(id: CKRecordID, completion: (CKRecord? -> ())?) {
+    func fetchTrip(id: CKRecordID, completion: RecordBlock?) {
         publicDatabase.fetchRecordWithID(id) { record, error in
             completion?(record)
         }
@@ -41,18 +42,21 @@ extension CKManager {
             
             // Set properties on record
             var cktrip = CKTrip(record: record)
-            cktrip.title = trip.title
-            cktrip.location = trip.location
-            print(trip.events?.count)
-            CKManager.sharedInstance.updateEvents(trip.events?.allObjects as? [Event] ?? [], forTripID: id)
-        
-            // Update record
-            self.publicDatabase.saveRecord(cktrip.record) { savedRecord, error in
-                guard let savedRecord = savedRecord else { return }
+
+            if cktrip.title != trip.title || cktrip.location != trip.location || cktrip.password != trip.password {
                 
-                let savedTrip = CDManager.sharedInstance.fetchTrip(savedRecord.recordID)
-                savedTrip?.lastPublished = NSDate()
+                cktrip.title = trip.title
+                cktrip.location = trip.location
+                cktrip.password = trip.password
+                
+                // Update record
+                self.publicDatabase.saveRecord(cktrip.record) { savedRecord, error in
+                    print(error?.localizedDescription)
+                }
             }
+            
+            CKManager.sharedInstance.updateEvents(trip.events?.allObjects as? [Event] ?? [], forTripID: id)
+
         }
     }
     

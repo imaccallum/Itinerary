@@ -19,7 +19,7 @@ class CKManager {
     
 
 
-      func fetchRecord(id: CKRecordID, completion: CKRecord? -> Void) {
+      func fetchRecord(id: CKRecordID, completion: RecordBlock) {
         publicDatabase.fetchRecordWithID(id, completionHandler: { record, error in
             completion(record)
         })
